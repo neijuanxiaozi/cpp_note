@@ -1,2 +1,2 @@
 # cpp_note
-learning cpp's note
+myself  cpp's learning note.
