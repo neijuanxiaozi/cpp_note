@@ -246,5 +246,10 @@ $ git revert 41ea42 -m'撤销对***的修改'
 [main 967560f] Revert "123"
 1 file changed, 1 deletion(-)
 
+# 给git命令设置 代理
+git config --global http.proxy http://127.0.0.1:17890
+git config --global https.proxy http://127.0.0.1:17890
+
+
 ```
 
