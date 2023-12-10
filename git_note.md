@@ -44,18 +44,18 @@ git rm [file1] [file2] ...
 git mv [file-original] [file-renamed]
 
 # 提交暂存区到仓库区
-$ git commit -m [message]
+git commit -m [message]
 # 提交所有修改到仓库
-$ git commit -a -m'修改README的版权信息'
+git commit -a -m'修改README的版权信息'
 
 # 提交暂存区的指定文件到仓库区
-$ git commit [file1] [file2] ... -m [message]
+git commit [file1] [file2] ... -m [message]
 
 # 使用一次新的commit，替代上一次提交
 # 如果代码没有任何新变化，则用来改写上一次commit的提交信息
-$ git commit --amend -m [message]
+git commit --amend -m [message]
 
-$ git log -n2
+git log -n2
 commit 412b56448568ff362ef312507e78797befcf2846 (HEAD -> main)
 Author: Kanding <123anding@163.com>
 Date:   Thu Dec 1 19:02:22 2022 +0800
