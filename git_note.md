@@ -244,7 +244,7 @@ ccb9937 (HEAD -> main, origin/main, origin/HEAD) HEAD@{0}: commit: 报表新增�
 # revert撤销指定的提交，“-m”附加说明
 $ git revert 41ea42 -m'撤销对***的修改'
 [main 967560f] Revert "123"
-                            1 file changed, 1 deletion(-)
+1 file changed, 1 deletion(-)
 
 ```
 
