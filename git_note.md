@@ -79,9 +79,8 @@ cat .git/refs/heads/main
 cat .git/HEAD
 ref: refs/heads/main
 
-# 切换到dev分支，HEAD指向了dev
-git switch dev
-Switched to branch 'dev'
+
+# 显示当前指针
 cat .git/HEAD
 ref: refs/heads/dev
 
@@ -163,13 +162,89 @@ git pull = git fetch + git merge
 # 合并
 git merge
 
-# 查看当前分支
-git branch --show-current
+# 分支相关命令
+git branch  # 列出所有分支 *为当前分支  只显示本地分支
+git branch -r #列出所有远程分支
+git branch -a #列出所有远程和本地分支
+git branch dev # 创建dev分支 但是停留在当前分支
+git branch -d dev # 删除dev分支，-D（大写）强制删除
+git checkout -b dev # 从当前分支创建并切换到dev分支
+git checkout -b feature1 dev # 从本地dev分支代码创建一个 feature1分支，并切换到新分支
+git branch [branch][commit] #新建一个分支，指向指定commit id
+git branch --tack [branch][remote-branch] #新建一个分支与指定的远程分支建立关联
+git checkout -b hotfix remote hotfix #远端remote的hotfix分支创建本地hotfix分支
+git branch --set-upstream [branch] [remote-branch] #在现有分支与指定的远程分支之间建立跟踪关联
+git checkout [branch-name] #切换到指定分支，并更新工作区
+git checkout . #撤销工作区的（未暂存）修改，把暂存区恢复到工作区
+git checkout HEAD . #撤销工作区、暂存区的修改，用HEAD指向的当前分支最新版本替换
+git merge [branch] #合并指定分支到当前分支
+git merge --no-ff dev # 合并dev分支到当前分支，参数--no-ff禁用快速合并模式
+git push origin --delete [branch-name] # 删除远程分支
+git rebase master # 将当前分支变基合并到master分支
+git switch dev # 切换到dev分支，HEAD指向了dev
+git switch -c dev #创建并切换到新的dev分支
+git reset #专门用来实现本地修改的撤销 
 
-# 列出所有分支
-git branch
+#把两个分支的修改内容合并到一起的办法有两种：merge 和 rebase，作用都是一样的，区别是rebase的提交历史更简洁，干掉了分叉，merge的提交历史更完整。
+git rebase master #将当前分支合的提交打补丁到master中
 
-# 创建dev分支
-git branch dev
+
+#标签（Tags）
+git tag #查看标签列表
+git tag -l 'a*' # 查看名称是“a”开头的标签列表，带查询参数
+git show [tagname] #查看标签信息
+git tag [taganem] #创建一个标签，默认标签是打在最新提交的commit上的
+git tag [tagname] [commit id] #新建一个tag在指定commit上
+git tag -a v5.1 -m'v5.1版本' #创建标签v5.1.1039，-a指定标签名，-m指定说明文字
+git tag -d [tagname] #删除本地标签
+git checkout v5.1.1039 #切换标签，同时切换分支
+git push [remote] v5.1 #推送标签，标签不会默认随代码推送推送到服务端
+git push [remote] --tags #提交所有tag
+
+# 撤销
+git checkout . 	#撤销工作区的（未暂存）修改，把暂存区恢复到工作区。不影响暂存区，如果没暂存，则撤销所有工作区修改
+git checkout [file] #撤销指定文件
+git checkout HEAD . # 撤销工作区、暂存区的修改，用HEAD指向的当前分支最新版本替换工作区、暂存区
+git checkout HEAD [file] #指定文件
+git reset # 撤销暂存区状态 同git resetHEAD 不影响工作区
+git reset HERD # 指定文件
+git reset [commit] #回退到指定版本，清空暂存区，不影响工作区。工作区需要手动git checkout签出
+git reset --soft [commit] # 移动分支master、HEAD到指定的版本，不影响暂存区、工作区，需手动git checkout签出更新
+git reset --hard HEAD # 撤销工作区、暂存区的修改，用当前最新版
+git reset --hard HEAD~ # 回退到上一个版本，并重置工作区、暂存区内容。
+git reset --hard [commit] # 回退到指定版本，并重置工作区、暂存区内容。
+git revert[commit]  # 撤销一个提交，会用一个新的提交（原提交的逆向操作）来完成撤销操作，如果已push则重新push即可
+
+#reset有三种模式，对应三种参数：mixed（默认模式）、soft、hard。三种参数的主要区别就是对工作区、暂存区的操作不同
+
+git reset [--soft | --mixed | --hard] [HEAD]
+
+# 撤销暂存区
+$ git reset
+Unstaged changes after reset:
+M       R.md
+
+# 撤销工作区、暂存区修改
+$ git reset --hard HEAD
+
+# 回退版本库到上一个版本，并重置工作区、暂存
+$ git reset --hard HEAD~
+
+# 回到原来的版本（恢复上一步的撤销操作），并重置工作区、暂存
+$ git reset --hard 5f8b961
+
+# 查看所有历史提交记录
+$ git reflog
+ccb9937 (HEAD -> main, origin/main, origin/HEAD) HEAD@{0}: commit: 报表新增导入功能
+8f61a60 HEAD@{1}: commit: bug：修复报表导出bug
+4869ff7 HEAD@{2}: commit: 用户报表模块开发
+4b1028c HEAD@{3}: commit: 财务报表模块开发完成
+
+
+# revert撤销指定的提交，“-m”附加说明
+$ git revert 41ea42 -m'撤销对***的修改'
+[main 967560f] Revert "123"
+                            1 file changed, 1 deletion(-)
+
 ```
 
