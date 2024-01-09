@@ -1,5 +1,5 @@
+<font Size=3 color="#6c69f">我是浅紫色3号字体,默认字体就是3号</font>
 
-<font Size=3 color="#6c608f">我是浅紫色3号字体,默认字体就是3号</font>
 1. classes的构造函数都被声明为 explicit, 这可阻止它们被用来执行隐式类型转换 (implicit type conversions) ，但它们仍可被用来进行显式类型转 (explicit type conversions) 。声明为 explicit 的构造函数通常比其 non-explicit 兄弟更受欢迎，因为它们禁止编译器执行非预期（往往也不被期望）的类型转换。除非我有一个好理由允许构造函数被用于隐式类型转换，否则我会把它声明为explicit。  
 
 
