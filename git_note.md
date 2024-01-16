@@ -2,6 +2,9 @@
 #查看版本
 git --version					
 
+#初始化一个仓库 不加bare选项 就会将版本控制信息文件 放在.git文件夹下， 写了就直接放项目里，directory参数为仓库路径 不写directory 默认把当前目录变成成git仓库
+git init [--bare][directory]
+
 #查看git配置
 git config --list
 git config -l
@@ -249,7 +252,5 @@ $ git revert 41ea42 -m'撤销对***的修改'
 # 给git命令设置 代理
 git config --global http.proxy http://127.0.0.1:17890
 git config --global https.proxy http://127.0.0.1:17890
-
-
 ```
 

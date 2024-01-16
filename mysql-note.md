@@ -1,6 +1,7 @@
 ```sql
 mysql -V/--version       			查看mysql版本
 sudo service mysql start  			开启服务
+sudo service mysql restart  		重启服务
 sudo service mysql stop  			关闭服务
 systemctl status mysql   			查看mysql状态
 mysql -u root -p         			登录root 我的密码为123456
