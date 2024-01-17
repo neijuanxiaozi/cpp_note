@@ -31,7 +31,14 @@ ifconfig							查看网卡信息
 netstat								查看网络相关信息的命令
 unzip								解压zip文件 -d xxxxxx 表示解压到xxxx目录
 sudo apt-get install libmysqlclient-de 安装mysql相关连接库 tinywebserver需要用到
-
+mkdir [-p] 路径						Make Directory 创建文件夹 -p表示自动创建不存在的父目录
+touch 路径							创建文件，
+cat 路径								查看文件， cat显示文件的全部内容
+more 路径								查看文件内容 more支持翻页 空格翻页 q退出
+cp [-r] 参数1 参数2					复制文件或文件夹 -r用于文件夹的复制 表示递归 参数1表示要复制的文件 2表示目的地
+mv 参数1 参数2						移动文件或文件夹 参数1为被移动的文件或文件夹 参数2为目的地 不存在就改名
+rm [-r -r] 参数1 参数2 ...参数N	删除文件或文件夹 -r用于递归删除文件夹 -f用于强制删除 参数代表删除的文件 可以有多个参数 删除的文件可以有通配符 例如test*表示所有以test开头的文件
+su - root						切换root用户 exit退出
 ```
 
 
