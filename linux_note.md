@@ -50,6 +50,11 @@ cat test.txt | grep itheima					管道符命令举例
 cat test.txt | wc -l						管道符命令举例
 ls | grep test								管道符命令举例
 cat test.txt | grep itcast | grep itheima 	管道符命令举例
+echo 输出的内容  						在命令行内输出指定内容，复杂内容可以用""包裹
+``										反引号 被``包裹的内容会作为命令去执行
+>										将重定向左侧命令的结果 覆盖写入到符号右侧指定的文件中
+>>										将重定向左侧命令的结果 追加写入到符号右侧的指定的文件中
+tail [-f -num] Linux路径					查看文件尾部的内容 -f表示持续跟踪 -num表示尾部多少行 默认10行
 ```
 
 
