@@ -55,6 +55,55 @@ echo 输出的内容  						在命令行内输出指定内容，复杂内容可�
 >										将重定向左侧命令的结果 覆盖写入到符号右侧指定的文件中
 >>										将重定向左侧命令的结果 追加写入到符号右侧的指定的文件中
 tail [-f -num] Linux路径					查看文件尾部的内容 -f表示持续跟踪 -num表示尾部多少行 默认10行
+su [-] [用户名]							-是可选的，表示是否在切换用户后加载环境变量 参数：用户名，表示要切换的用											户，省略表示切换到root， 切换用户后exit回到上一个用户，或者ctrl+d
+sudo 命令								sudo可以为普通的命令授权，临时以root身份执行，但不是所有用户都有sudo权力
+
+为普通用户配置sudo认证
+1.切换到root用户，执行visudo命令 自动打开/etc/sudoers
+在文件的最后添加
+jianglong ALL=(ALL) NOPASSWD: ALL
+其中NOPASSWD: ALL表示使用sudo命令 无需输入密码
+最后通过wq保存退出
+
+
+Linux中关于权限的管控级别有两个级别
+1.针对用户的权限控制
+2.针对用户组的权限控制
+
+用户组管理
+以下命令需要root用户执行
+groupadd   创建用户组
+groupdel	删除用户组
+
+用户管理
+1.useradd [-g -d] 用户名      -g指定用户的组 不指定用户的组会创建同名的组并自动加入 -d指定用户的HOME路径，默认/home/用户名
+2.userdel [-r] 用户名          -r删除用户的HOME目录，不使用-r，删除用户时，HOME目录保留
+3.id [用户名]                   查看用户所属组
+4.usermod -aG 用户组 用户名     及那个指定用户加入指定用户组
+
+getent passwd						查看当前系统中有哪些用户
+getent group						查看当前系统中有哪些用户组
+
+ls -l
+权限控制信息	  所属用户   所属用户组
+drwxrwxr-x 13 jianglong jianglong 4096 Jan 17 20:43 code
+drwxrwxr-x  5 jianglong jianglong 4096 Jan 20 20:22 fastdfs
+drwxrwxr-x  3 jianglong jianglong 4096 Dec  9 20:03 git_learn
+drwxrwxr-x  3 jianglong jianglong 4096 Jan 20 19:36 heima_distributed_file_system
+-rw-rw-r--  1 jianglong jianglong   23 Jan 26 21:03 hello2.txt
+-rw-rw-r--  1 jianglong jianglong   21 Jan 26 21:02 hello.txt
+drwxrwxr-x  2 jianglong jianglong 4096 Aug 21 15:29 java
+drwxr-xr-x 13 jianglong jianglong 4096 Aug  8 15:47 neo4j-community-5.11.0
+drwxrwxr-x  3 jianglong jianglong 4096 Jan 17 20:03 tools
+
+权限控制信息
+第1位：-表示文件 d表示文件夹 l表示软连接
+第2-4位：表示所属用户权限 
+第5-7位：表示所属用户组权限
+第8-10位：表示其他用户权限
+r表示读权限
+w表示写权限
+x表示执行权限
 ```
 
 
