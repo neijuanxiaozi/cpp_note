@@ -104,6 +104,16 @@ drwxrwxr-x  3 jianglong jianglong 4096 Jan 17 20:03 tools
 r表示读权限
 w表示写权限
 x表示执行权限
+
+
+chmod [-R] 权限 文件或文件夹						修改文件、文件夹的权限信息(只有文件(夹)的所属用户或root用户可以修改) -R对文件夹内的全部内容应用同样的操作
+
+chmod举例:
+chmod u=rwx,g=rx,o=x hello.txt 						将hello.txt文件权限修改为:rwxr-x--x,其中u表示user所属用户权限,g表示group组权限,o表示other其他用户权限
+
+也可以使用权限的数字序号:权限可以用3位数字来代表,第一位表示用户权限,第二位表示用户组权限,第三位表示其他用户权限,其中r为4,w为2,x为1
+举例:
+chmod 751 hello.txt    							将hello.txt文件权限修改为:rwxr-x--x
 ```
 
 
