@@ -134,7 +134,175 @@ chown root hello.txt 			#将hello.txt所属用户修改为root
 chown :root hello.txt 			#将hello.txt所属用户组修改为root
 chown root:itheima hello.txt 			#将hello.txt所属用户修改为root 用户组修改为itheima
 chown -R root test		 			#将test所属用户修改为root 并对文件夹下所有文件修改
+
+
+
+
+快捷按键:
+ctrl + d #退出或登出(退出某些特定程序的专属页面 例如python)
+history  #查看历史命令
+ctrl + r #输入内容 去历史命令中内容 回车可以直接执行 左右键获得该命令
+ctrl + a #光标跳到命令开头
+ctrl + e #光标跳到命令结尾
+ctrl + 左 #向左跳一个单词
+ctrl + 右 #向右跳一个单词
+ctrl + l 或者 clear #清空终端内容
+
+
+yum:RPM包软件管理器，用于自动化安装配置Linux软件，并可以自动解决依赖问题
+语法: yum [-y] [install | remove | search] 软件名称
+	选项: -y自动确认 无需手动确认安装或卸载过程
+	intall:安装
+	remove:卸载
+	search:搜索
+apt:DEB包软件管理器，用于自动化安装配置Linux软件，并可以自动解决依赖问题
+语法: apt [-y] [install | remove | search] 软件名称
+	选项: -y自动确认 无需手动确认安装或卸载过程
+	intall:安装
+	remove:卸载
+	search:搜索
 	
+	
+systemctl命令
+systemctl start | stop | status | enable | disable 服务名
+start	#启动
+stop	#关闭
+status	#查看状态
+enable	#开启开机自启
+disable	#关闭开机自启
+系统内置服务:
+NetworkManager #主网络服务
+network		#副网络服务
+firewalld	#防火墙服务
+sshd, ssh服务(FinalShell远程登录Linux)
+
+
+软链接:包含了到原文件的路径信息  硬链接:对原文件起了一个别名
+在系统创建软链接，可以将文件、文件夹链接到其它位置 类似快捷方式
+ln -s 参数1 参数2
+-s选项表示创建软链接
+参数1:被链接的文件或文件夹
+参数2:要链接去的目的地
+
+
+date命令
+在命令行中查看系统的时间
+date [-d] [+格式化字符串]
+-d按照给定的字符串显示日期 一般用于日期计算
+
+修改linux时区为东八区
+rm -f /etc/localtime
+sudo ln -s /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+
+
+ping命令
+ping [-c num] ip或主机名
+选项:-c检查的次数 不使用-c选项 将无限次持续检查
+参数:ip或主机名 被检查的服务器的ip地址或主机地址
+
+wget命令
+wget是非交互式的文件下载器 可以在命令行内下载网络文件
+wget [-b] url
+选项:-b可选 后台下载 会将日志写入到当前工作目录的wget-log文件
+参数:url 下载链接
+
+curl命令
+curl可以发送http网络请求 可用于:下载文件、获取信息等
+语法: curl [-O] url
+选项:-O 用于下载文件 当url是下载链接时 可以使用此选项保存文件
+参数:url 要发起请求的网络地址
+
+
+查看进程
+语法: ps [-e -f]
+选项: -e 显示出全部的进程
+选项: -f 以完全格式化的形式展示信息
+
+
+查看系统资源占用
+top命令查看CPU、内存使用情况，类似windows的任务管理器 默认每五秒刷新一次
+语法:直接输入top即可 按q或者ctrl+c退出
+top命令选项:
+选项 		功能
+-p		只显示某个进程的信息
+-d		设置刷新时间 默认5s
+-c		显示产生进程的完整命令 默认是进程名
+-n		指定刷新次数 比如top -n 3 刷新输出3次后退出
+-b		以非交互非全屏模式运行 以批次的方式执行top 一般配合-n指定输出几次统计信息 将输出重定向到指定文件 比如top -b -n 3 > /tmp/top.tmp
+-i		不显示闲置或无用的进程
+-u		查找特定用户启动的进程
+
+释放缓存:echo 1 > /proc/sys/vm/drop_caches
+
+
+
+磁盘信息监控
+使用df命令 查看硬盘的使用情况
+df [-h]
+
+使用iostat查看cpu 磁盘的相关信息
+语法: iostat [-x][num1][num2]
+选项: -x 显示更多信息
+num1: 数字 刷新间隔 num2: 刷新几次
+
+网络状态监控
+sar命令查看网络的相关统计
+语法:sar -n DEV num1 num2
+选项:-n 查看网络 DEV表示查看网络接口
+num1:刷新间隔 num2:查看次数
+
+
+环境变量
+在Linux系统中执行:env命令即可查看当前系统中记录的环境变量
+环境变量是kv型结构
+PATH=/home/jianglong/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/usr/local/jdk/bin:/usr/local/jdk/jre/bin
+PATH记录了系统执行任何命令的搜索路径，当执行任何命令，都会按照顺序从上述路径中搜索要执行的程序的本体
+echo #PATH
+自行设置环境变量:
+Linux环境变量可以用户自行设置，其中分为:
+1.临时设置 语法:export 变量名=变量值
+2.永久生效
+	- 针对当前用户生效 配置在当前用户的: ~/.bashrc文件中
+	- 针对所有用户生效 配置在系统的: /etc/profile文件中
+	- 通过语法: source配置文件，进行立刻生效
+
+
+
+压缩和解压
+压缩格式:
+1.zip:Linux Windows MacOS常用
+2.7zip:Windows常用
+3.rar:Windows常用
+4.tar:Linux MacOS常用
+5.gzip:Linux MacOS常用
+
+tar命令
+Linux和Mac系统常用常用有2中压缩格式 后缀名分别是 .tar .gz
+.tar 称之为tarball 归档文件 即简单的将文件组装到一个.tar的文件内 并没有太多文件体积的减少 仅仅是简单的封装
+.gz 也常见为.tar.gz gzip格式压缩文件 即使用gzip压缩算法将文件压缩到一个一个文件内 可极大减少压缩后的体积
+针对这两种格式 使用tar命令均可以进行压缩和解压缩的操作
+语法:tar [-c -v -x -f -z -C] 参数1 参数2 ... 参数N
+	-c 创建压缩文件 用于压缩模式
+	-v 显示压缩 解压过程 用于查看进度
+	-x 解压模式
+	-f 要创建的文件或要解压的文件 -f选项必须在所有选项中位置处于最后一个
+	-z gzip模式  不使用就是不同的tarball模式
+	-C 选择解压的目的地 用于解压模式
+
+
+zip命令
+使用zip命令 压缩文件为zip压缩包
+语法: zip [-r] 参数1 参数2 ...参数N
+-r 被压缩的包含文件夹的时候 需要使用-r选项
+示例:
+zip -r test.zip test itheima a.txt
+
+unzip命令
+使用unzip命令 解压zip压缩包
+语法: unzip [-d] 参数
+-d 指定解压去的位置
+参数 被解压的zip压缩包文件
+
 ```
 
 
