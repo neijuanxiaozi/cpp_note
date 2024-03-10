@@ -305,5 +305,31 @@ unzip命令
 
 ```
 
+在服务器上搭建一些服务的时候，经常要用到screen命令。某些服务开启的时候需要占据一整个控制台，如果关闭了就会导致进程终止。这就成了类似单进程的效果。而screen命令就是为了能够在服务器上开启多个控制面板(screen)，用以容纳不同的任务。
 
+```shell
+1、创建一个screen
+screen -S  ***
+2、查看当前screen列表
+screen -ls
+#detached：相当于最小化窗口
+#attached：相当于当前窗口
+#dead：相当于死了的窗口
+3、重新进入已经创建的screen
+screen -r ***
+4、退出screen窗口
+输入一下快捷键：ctrl + a + d
+5、kill screen窗口
+在screen窗口内部时 ： 
+   输入一下快捷键：ctrl+d
+在screen窗口外部时：
+   1.使用screen窗口的名字
+screen -S session_name -X quit
+2.回到screen窗口，再退出screen窗口
+
+1.回到screen窗口
+screen -r session_name
+2.利用exit退出screen窗口，退出窗口后session窗口被自动kill
+exit # 可能需要多次exit命令，因为screen中正在运行的程序可能也需要使用exit命令才退出（先使用exit命令退出screen中正在运行的程序，再使用exit命令退出screen）
+```
 
