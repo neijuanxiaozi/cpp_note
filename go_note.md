@@ -1,4 +1,7 @@
+#  go run和go build
+
 # 一. Go基础语法
+
 https://www.bilibili.com/read/readlist/rl496566
 
 ## init函数
@@ -374,7 +377,20 @@ https://www.bilibili.com/read/cv14519061/?from=readlist
 
 https://www.bilibili.com/read/cv14547209/?from=readlist
 
+## 指针
 
+go语言在使用指针时，会使用内部的垃圾回收机制， 开发人员不需要手动释放内存
+
+c语言不允许返回栈上的指针，go语言可以返回栈上的指针，程序会在编译的时候就确定了变量的分配位置
+
+编译的时候如果发现有必要的话，就将变量分配到堆上
+
+## 不支持的语法
+
+1. --i ++i不支持
+2. 不支持地址加减
+3. 不支持三目运算符 ? :
+4. 只有false代表逻辑假  数字0和nil不能代表假逻辑 
 
 # 二. Go语言设计与实现
 
