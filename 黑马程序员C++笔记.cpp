@@ -1,64 +1,62 @@
-//定义常量两种方式
-//1 #define 宏常量
-//2 const 修饰的变量
+// 定义常量两种方式
+// 1 #define 宏常量
+// 2 const 修饰的变量
 
-//1 #define 宏常量
-//#define Day 7 //Day 是常量 不可以修改
+// 1 #define 宏常量
+// #define Day 7 //Day 是常量 不可以修改
 
-//函数声明
-//void swap(int a, int b);
-//函数定义
-//void swap(int a,int b)
+// 函数声明
+// void swap(int a, int b);
+// 函数定义
+// void swap(int a,int b)
 //{
 //	int temp = a;
 //	a = b;
 //	b = temp;
 //	cout << "a=" << a << endl;
 //	cout << "b=" << b << endl;
-//}
+// }
 
-//单行注释 双斜线 /*多行注释*/
+// 单行注释 双斜线 /*多行注释*/
 /*int a = 10;
 cout << "a=" << a<<endl;
 cout << "hello world" << endl;
 cout << "一周总共有：" << Day << "天" << endl;*/
-//2 const 修饰的变量
-//const int month = 12;//const 修饰的变量也不可修改
-//short ：短整型 2字节， int：4字节，long ：windows中占4字节 linux（32位）4字节  linux（64位）8字节
-//long long：8字节
-//sizeof 返回数据类型大小
+// 2 const 修饰的变量
+// const int month = 12;//const 修饰的变量也不可修改
+// short ：短整型 2字节， int：4字节，long ：windows中占4字节 linux（32位）4字节  linux（64位）8字节
+// long long：8字节
+// sizeof 返回数据类型大小
 /*short num1 = 10;
 cout << "short占内存空间为：" << sizeof(short) << endl;
 int num2 = 10;
 cout << "int占内存空间为：" << sizeof(int) << endl;*/
-//浮点型
-//float（7位有效数字） 占4字节， double（15-16位有效数字） 占8字节
-//float f1 = 3.14f;//如果不写f，会默认3.14为double类型，然后用float接受时转换为float，如果在后面加上f会直接为float类型，不用转换
-//默认情况下 输出一个小数，只显示6位有效数字
+// 浮点型
+// float（7位有效数字） 占4字节， double（15-16位有效数字） 占8字节
+// float f1 = 3.14f;//如果不写f，会默认3.14为double类型，然后用float接受时转换为float，如果在后面加上f会直接为float类型，不用转换
+// 默认情况下 输出一个小数，只显示6位有效数字
 
-//科学计数法表示小数
+// 科学计数法表示小数
 /*float f3 = 3e-2;
 cout << "f3=" << f3 << endl;*/
 
+// 字符类型 ''单引号中只能有一个字符，双引号中不能只有1个字符，字符变量占用1个字节
+// bool类型占1个字节
 
-//字符类型 ''单引号中只能有一个字符，双引号中不能只有1个字符，字符变量占用1个字节
-//bool类型占1个字节
+// 除法 ：整数和整数相除得到整数， 两个小数可以相除得到的结果可以是小数也可以是整数
+// 小数不能做取模运算
 
-//除法 ：整数和整数相除得到整数， 两个小数可以相除得到的结果可以是小数也可以是整数
-//小数不能做取模运算
-
-//三目运算符
-//将a和b作比较，将变量大的赋值给变量c
-//int a1 = 10;
-//int b = 20;
-//int c = 0;
-//c = (a1 > b ? a1 : b);
-//cout << "c=" << c << endl;
-//zai C++中三目运算符返回的是变量，可以继续赋值
+// 三目运算符
+// 将a和b作比较，将变量大的赋值给变量c
+// int a1 = 10;
+// int b = 20;
+// int c = 0;
+// c = (a1 > b ? a1 : b);
+// cout << "c=" << c << endl;
+// zai C++中三目运算符返回的是变量，可以继续赋值
 //(a1 > b ? a1 : b) = 100;
-//cout << "a1=" << a1 << endl;
-//cout << "b=" << b << endl;
-
+// cout << "a1=" << a1 << endl;
+// cout << "b=" << b << endl;
 
 /*swich(表达式){
 case1:执行语句;break;
@@ -70,28 +68,27 @@ default:执行语句;break;
 do{}
 while();*/
 
-//sizeof(数组名)统计数组长度
+// sizeof(数组名)统计数组长度
 
-//函数的声明可以有多次，一般写一次
+// 函数的声明可以有多次，一般写一次
 
-//函数分文件编写一般有四个步骤
-//1 创建后缀名位.h的文件
-//2 创建后缀名位.cpp的文件
-//3 在头文件中写函数的声明
-//4 在源文件文件中写函数的定义
+// 函数分文件编写一般有四个步骤
+// 1 创建后缀名位.h的文件
+// 2 创建后缀名位.cpp的文件
+// 3 在头文件中写函数的声明
+// 4 在源文件文件中写函数的定义
 
+// 指针占4个字节（32位操作系统,顶部选择x86）  占8个字节（64位操作系统，顶部选择x64）
 
-//指针占4个字节（32位操作系统,顶部选择x86）  占8个字节（64位操作系统，顶部选择x64）  
+// 空指针:指向内存中编号为0的空间(0~255之间的内存编号是系统占用的,不可访问),指针初始化没有指向时,就指向这,空指针指向的内存时不可以访问的
+// int* p = NULL;//空指针不可以访问
 
-//空指针:指向内存中编号为0的空间(0~255之间的内存编号是系统占用的,不可访问),指针初始化没有指向时,就指向这,空指针指向的内存时不可以访问的
-//int* p = NULL;//空指针不可以访问
+// 野指针:指针变量指向非法的内存空间
 
-//野指针:指针变量指向非法的内存空间
-
-//const修饰指针,有三种情况
-//1 const修饰指针,常量指针
-//2 const修饰常量,指针常量
-//3 const即修饰指针,又修饰常量
+// const修饰指针,有三种情况
+// 1 const修饰指针,常量指针
+// 2 const修饰常量,指针常量
+// 3 const即修饰指针,又修饰常量
 
 /*
 	1 const修饰指针,常量指针
@@ -114,7 +111,7 @@ while();*/
 
 */
 
-//结构体 
+// 结构体
 /*
 struct 结构体名 {结构体成员列表};
 
@@ -142,17 +139,14 @@ struct Student
 创建时可以省略结构体名称 Student s1;
 */
 
-
-
-//通过指针访问结构体变量中的数据 用->
+// 通过指针访问结构体变量中的数据 用->
 /*
 	student s={"张三",18,100};
 	student *p = &s;
 	cout<<"姓名:"<<p->name<<endl;
 */
 
-
-//结构体嵌套结构体
+// 结构体嵌套结构体
 /*
 	struct teacher
 	{
@@ -231,8 +225,6 @@ void test02()
 }
 */
 
-
-
 /*
 引用:
 int a = 10;
@@ -310,7 +302,6 @@ const int & ref=10;//正确用法
 /*
 	函数声明由默认参数，函数实现就不能有默认参数，声明和实现只能有一个有默认参数
 */
-
 
 /*
 	函数重载:函数名相同 参数不同 函数返回值不能作为函数重载的条件
@@ -569,7 +560,6 @@ const int & ref=10;//正确用法
 	}
 */
 
-
 /*
 初始化列表:用来初始化属性
 构造函数():属性1(值1),属性2(值2)...{}
@@ -619,7 +609,6 @@ int main() {
 }
 */
 
-
 /*
 //静态成员:静态成员变量 静态成员函数
 //静态成员变量
@@ -659,18 +648,15 @@ int main() {
 }
 */
 
-
 /*
 	静态成员函数:所有对象共享一个函数 静态成员函数只能访问静态成员变量
 */
-
 
 /*
 	在C++种类内的成员变量和成员函数分开存储  只有非静态成员变量才属于类的对象上
 	空对象占用内存空间为1字节  C++编译器会给每个空对象也分配一个字节空间 是为了区分空对象占内存的位置
 	每个空对象也应该有一个独一无二的内存地址
 */
-
 
 /*
 	this指针:
@@ -910,8 +896,6 @@ int main() {
 }
 */
 
-
-
 /*
 运算符重载:
 class Person
@@ -1087,7 +1071,6 @@ int main() {
 
 */
 
-
 /*
 	菱形继承:
 					动物
@@ -1172,9 +1155,6 @@ int main() {
 }
 
 */
-
-
-
 
 /* P137  多态实现 计算器类
 class Calculator
@@ -1267,7 +1247,6 @@ int main() {
 	return 0;
 }
 */
-
 
 /*P138 纯虚函数
 写法:virtual 返回值类型 函数名 (参数列表) =0 ;
@@ -1500,7 +1479,6 @@ int main()
 }
 */
 
-
 /*p168函数模板基本句法
 模板分为：函数模板和类模板
 函数模板作用：建立一个通用函数，其函数返回值类型和形参类型可以不具体指定，用一个虚拟的类型来代表
@@ -1579,7 +1557,6 @@ int main()
 }
 */
 
-
 /*P171普通函数与函数模板的区别
 
 //1.普通函数调用可以发生隐式类型转换
@@ -1618,7 +1595,6 @@ int main()
 	return 0;
 }
 */
-
 
 /*P172 普通函数和函数模板调用规则
  1.如果函数模板和普通函数都可以调用，优先调用普通函数
@@ -1661,7 +1637,6 @@ int main()
 	return 0;
 }
 */
-
 
 /*P173 模板的局限性
 模板的通用性不是万能的      有些特定数据类型，需要用具体化方式做特殊实现
@@ -1776,7 +1751,6 @@ int main()
 }
 */
 
-
 /*P175类模板与函数模板区别
 1.类模板没有自动类型推导的使用方式
 2.类模板在模板参数列表中可以有默认参数
@@ -1818,7 +1792,6 @@ int main()
 	return 0;
 }
 */
-
 
 /*P176类模板中成员函数创建时机
 类模板中成员函数和普通类中成员函数创建时机是有区别的
@@ -1878,8 +1851,6 @@ int main()
 	return 0;
 }
 */
-
-
 
 /*p177类模板对象做函数参数
 三种方式：
@@ -1966,7 +1937,6 @@ void test01()
 {Son2<int, char>S2;}
 */
 
-
 /*P179类模板成员函数类外实现
 template<class T1, class T2>
 class Person
@@ -1999,7 +1969,6 @@ int main()
 	return 0;
 }
 */
-
 
 /*P180类模板份文件编写
 类模板中成员函数创建时机是在调用阶段，导致份文件编写时链接不到
@@ -2082,7 +2051,6 @@ int main()
 }
 */
 
-
 /*P185  STL(标准模板库)
 广义上分为 容器 算法 迭代器
 容器和算法之间通过迭代器进行无缝连接
@@ -2109,7 +2077,6 @@ STL容器就是将运用最广泛的一些数据结构实现出来 数组 链表 栈 队列 树等等
 随机访问迭代器：读写操作 可以以跳跃的方式访问任意数据 功能最强的迭代器
 最后两个迭代器用的多。
 */
-
 
 /*P186 vector存放内置数据类型
 容器：vector
@@ -2146,7 +2113,6 @@ void test01()
 	for_each(v.begin(), v.end(), myPrint);
 }
 */
-
 
 /*P187vector存放自定义数据类型
 //vector容器中存放自定义数据类型
@@ -2208,8 +2174,6 @@ int main()
 	return 0;
 }
 */
-
-
 
 /*P188 vector中嵌套容器
 //容器嵌套容器
@@ -2279,7 +2243,6 @@ int main()
 	return 0;
 }
 */
-
 
 /*P190 string容器-赋值操作
 string& operator=(const char*s);//char*类型字符串 赋值给当前字符串
@@ -2363,7 +2326,6 @@ int main()
 	return 0;
 }
 */
-
 
 /*p192 string查找和替换
 int find(const string&str,int pos=0)const;//查找str第一次出现位置，从pos开始查找
@@ -2483,7 +2445,6 @@ int main()
 }
 */
 
-
 /*P195 string插入和删除
 函数原型：
 string& insert(int pos,const char*s);//插入字符串
@@ -2505,8 +2466,6 @@ int main()
 	return 0;
 }
 */
-
-
 
 /*P196 string容器-字串获取
 函数原型：
@@ -2535,7 +2494,6 @@ int main()
 	return 0;
 }
 */
-
 
 /*P197 vector容器-构造函数
 vector数据结构和数组非常相似，也称为单端数组
@@ -2582,7 +2540,6 @@ int main()
 }
 */
 
-
 /*P198  vector容器-赋值操作
 函数原型：
 vector& operator=(const vector &vec);//重载等号操作符
@@ -2624,16 +2581,15 @@ int main()
 }
 */
 
-
 /*P199  vector容量和大小
 函数原型：
 empty();//判断容器是否为空
 capacity();//容器的容量
 size();//返回容器中元素的个数
 resize(int num);//重新指定容器的长度为num，若容器变长，则以默认值填充新位置
-                //如果容器变短 泽末尾超出容器长度的元素被删除
+				//如果容器变短 泽末尾超出容器长度的元素被删除
 resize(int num,elem);//重新指定容器的长度为num,若容器变长，则以elem值填充新位置
-                      //如果容器变短，则末尾超出容器长度的元素被删除
+					  //如果容器变短，则末尾超出容器长度的元素被删除
 void printVector(vector<int> &v)
 {
 	for (vector<int>::iterator it=v.begin();it!=v.end();it++)
@@ -2674,7 +2630,6 @@ int main()
 	return 0;
 }
 */
-
 
 /*P200 vector 插入和删除
 函数原型：
@@ -2730,7 +2685,6 @@ int main()
 	return 0;
 }
 */
-
 
 /*P201 vector数据存取
 函数原型：
@@ -2874,8 +2828,6 @@ int main()
 }
 */
 
-
-
 /*P204 deque(双端队列)容器-构造函数
 功能：双端数组 可以对头端进行插入和删除操作
 
@@ -2926,7 +2878,6 @@ int main()
 }
 */
 
-
 /*P205 deque容器-赋值操作
 函数原型：
 deque& operator=(const deque &deq);//重载等号操作符
@@ -2972,16 +2923,14 @@ int main()
 }
 */
 
-
-
 /*P206 deque容器大小操作
 函数原型：
 deque.empty();//判断容器是否为空
 deque.size();//返回容器中元素个数
 deque.resize(num);//重新指定容器的长度为num，若容器变长，则以默认值填充新位置。
-                  //如果容器变短，则末尾超出容器长度的元素被删除。
+				  //如果容器变短，则末尾超出容器长度的元素被删除。
 deque.resize(num,elem);//重新指定容器的长度为num，若容器边长，则以elem值填充新位置
-                       //如果容器变短，则末尾超出容器长度的元素被删除
+					   //如果容器变短，则末尾超出容器长度的元素被删除
 
 void printDeque(const deque<int>& d)
 {
@@ -3027,7 +2976,6 @@ int main()
 	return 0;
 }
 */
-
 
 /*P207 deque容器-插入和删除
 函数原型：
@@ -3128,7 +3076,6 @@ int main()
 }
 */
 
-
 /*P208 deque容器-数据存取
 函数原型:
 at(int idx);//返回所以索引所指的数据
@@ -3172,7 +3119,6 @@ int main()
 }
 */
 
-
 /*P209 deque容器-排序操作
 算法：
 sort(iterator beg,iterator end);//对beg和end区间元素进行排序
@@ -3211,7 +3157,6 @@ int main()
 	return 0;
 }
 */
-
 
 /*P210 STL案例1-评委打分
 5名选手：选手ABCDE 10个评委打分，去除最高分，去除评委中最低分， 取平均分
@@ -3302,7 +3247,6 @@ int main()
 	return 0;
 }
 */
-
 
 /*p212 stack容器-常用接口
 构造函数：
@@ -3403,7 +3347,6 @@ int main()
 	return 0;
 }
 */
-
 
 /*P216 list容器-构造函数
 STL中List和vecotr是两个最常被使用的容器，各有优缺点
@@ -3544,13 +3487,11 @@ erase(pos);//删除pos位置的数据，返回下一个数据的位置
 remove(elem);//删除容器中所有与elem值匹配的元素
 */
 
-
 /*P220 list数据存取 不支持索引和[]
 函数原型:
 front();//返回第一个元素
 back();//返回最后一个元素
 */
-
 
 /*P221 list反转和排序
 函数原型:
@@ -3585,8 +3526,6 @@ bool comparePerson(Person &p1,Person &p2)
 }
 */
 
-
-
 /*P223 set/multiset容器
 所有元素都会在插入时自动被排序
 set/multiset属于关联式容器，底层结构使用二叉树实现
@@ -3604,7 +3543,6 @@ set& oprator=(cosnt set &st);//重载等号操作符
 
 set插入用insert 不用push_back
 */
-
 
 /*P224 set大小和交换
 函数原型：
@@ -3625,7 +3563,7 @@ erase(elem);//删除容器中值为elem的元素
 /*P226 set查找和统计
 函数原型：
 find(key);//查找key是否存在， 若存在 返回该键的元素的迭代器；若不存在 返回set.end();
-count(key);//统计key的元素个数                                        
+count(key);//统计key的元素个数
 */
 
 /*P227 set容器和multiset区别
@@ -3667,7 +3605,6 @@ int main()
 }
 */
 
-
 /*P228 pair对组创建
 成对出现的数据， 利用对组可以返回两个数据
 创建方式：
@@ -3691,8 +3628,7 @@ int main()
 }
 */
 
-
-/*P229 set容器排序 
+/*P229 set容器排序
 set容器默认排序规则为从小到大
 利用仿函数 可以改变排序规则
 
@@ -3733,7 +3669,6 @@ int main() {
 	return 0;
 }
 */
-
 
 /* P230 set容器-自定义数据类型指定排序规则
 
@@ -3792,8 +3727,6 @@ map(const map &map);//拷贝构造函数
 map& operator=(const map &map);//重载等号操作符
 */
 
-
-
 /*P232 map 大小和交换
 size();//返回容器中元素的数目
 empty();//判断容器是否为空
@@ -3801,7 +3734,7 @@ swap(st);//交换两个集合容器
 */
 
 /*P233 map插入和删除
-insert(elem);//在容器中插入元素    
+insert(elem);//在容器中插入元素
 clear();//清除所有元素
 erase(pos);//删除pos迭代器所指的元素，返回下一个元素的迭代器
 erase(beg,end);//删除区间[beg,end)的所有元素 返回下一个元素的迭代器
@@ -3819,16 +3752,14 @@ find(key);///查找key是否存在，若存在， 返回该键的元素的迭代器，若不存在 返回set.
 count(key);//统计key的元素个数 返回整型
 */
 
-
 /*P235 map容器排序
-map容器默认排序规则为按照key值 从小到大排序 
+map容器默认排序规则为按照key值 从小到大排序
 利用仿函数 改变排序规则
 对于自定义类型 map必须指定排序规则吗， 同set容器
 */
 
-
 /*P236 STL案例员工分组
-*/
+ */
 
 /*P237 STL-函数对象
 重载函数调用操作符的类，其对象常称为函数对象
@@ -3890,7 +3821,6 @@ int main() {
 }
 */
 
-
 /*P238 谓词-一元谓词
 返回bool类型的仿函数称为谓词
 如果operator()接收一个参数， 叫做一元谓词
@@ -3937,8 +3867,6 @@ int main() {
 }
 */
 
-
-
 /*P241 关系仿函数
 
 实现关系对比
@@ -3974,7 +3902,6 @@ int main() {
 	return 0;
 }
 */
-
 
 /*P242 内建函数对象-逻辑仿函数  //基本用不到
 实现逻辑运算
@@ -4102,7 +4029,6 @@ find(iterator beg, iterator end, value);
 //value 查找的元素
 */
 
-
 /*P246 find_if
 按条件查找元素
 函数原型：
@@ -4118,9 +4044,8 @@ find_if(iterator beg, iterator end, _Pred);
 adjacent_find(iterator beg,iterator end);
 //查找相邻重复元素，返回相邻元素的第一个位置的迭代器
 //beg开始迭代器
-//end结束迭代器                                    
+//end结束迭代器
 */
-
 
 /*P248 binary_search
 查找指定元素是否存在
@@ -4132,7 +4057,7 @@ bool binary_search(iterator beg,iterator end, value);
 //value 查找的元素
 */
 
-/*P249 功能描述 
+/*P249 功能描述
 统计元素个数
 count(iterator beg, iterator end, value);
 //统计元素出现次数
@@ -4152,7 +4077,6 @@ count_if(iterator beg, iterator end, _Pred);
 //_Pred谓词
 */
 
-
 /* 常用排序算法
 sort   //对容器内元素进行排序
 random_shuffle //洗牌 指定范围内的元素随机调整次序
@@ -4160,14 +4084,12 @@ merge //容器元素合并，并存储到另一容器中
 reverse  //反转指定范围元素
 */
 
-
 /*P251 sort
 sort(iterator beg, iterator end, _Pred);
 //beg 开始迭代器
 //end 结束迭代器
 //_Pred 谓词
 */
-
 
 /*P252 random_shuffle
 洗牌 指定范围内的元素随机调整次序
@@ -4179,7 +4101,6 @@ random_shuffle(iterator beg, iterator end);
 使用时记得加随机种子
 */
 
-
 /*P253 merge
 两个容器元素合并，并存储到另一容器中
 //注意：两个容器必须是有序的
@@ -4189,7 +4110,6 @@ random_shuffle(iterator beg, iterator end);
 //end2 容器2结束迭代器
 //dest 目标容器开始迭代器
 */
-
 
 /*P254 reverse
 将容器内元素进行反转
@@ -4206,7 +4126,6 @@ replace_if//容器内指定范围满足条件的元素替换为新元素
 swap //互换两个容器的元素
 */
 
-
 /*P255 copy   用的很少
 容器内指定范围的元素拷贝到另一容器中
 copy(iterator beg, iterator end, iterator dest);
@@ -4214,7 +4133,6 @@ copy(iterator beg, iterator end, iterator dest);
 //end 结束迭代器
 //dest 目标起始迭代器
 */
-
 
 /*P256 replace
 replace(iterator beg, iterator end,oldvalue, newvalue)
@@ -4225,10 +4143,8 @@ replace(iterator beg, iterator end,oldvalue, newvalue)
 //newvalue 新元素
 */
 
-
-
 /*P257 replace_if
-将区间内满足条件的元素 替换成指定元素 
+将区间内满足条件的元素 替换成指定元素
 函数原型：
 replace_if(iterator beg, iterator end, _pred,newvalue);
 //按条件替换元素 满足条件的替换成指定元素
@@ -4239,9 +4155,6 @@ replace_if(iterator beg, iterator end, _pred,newvalue);
 replace_if 按条件查找 可以利用仿函数 灵活筛选满足的条件
 */
 
-
-
-
 /*P258 swap 互换两个容器的元素
 swap(container c1, container c2);
 //互换两个容器的元素
@@ -4249,8 +4162,6 @@ swap(container c1, container c2);
 //c2 容器2
 同种类型容器 才可以互换
 */
-
-
 
 /*常用算术生成算法
 算术生成算法属于小型算法， 使用时包含的头文件为#include<numeric>
@@ -4276,15 +4187,12 @@ fill(iteratro geb, iterator end, value);
 //value 填充的值
 */
 
-
-
 /*常用的集合算法
 
 set_itersection //求两个容器的交集
 set_union //求两个容器的并集
 set_difference //求两个容器的差集
 */
-
 
 /*P261 set_intersection
  求两个容器的交集
@@ -4297,7 +4205,6 @@ set_difference //求两个容器的差集
 //dest 目标容器开始迭代器
 */
 
-
 /*P262 set_union
 set_union(iterator beg1, iterator end1, iterator beg2, iterator end2, iterator dest)
 //求两个集合的并集
@@ -4308,7 +4215,6 @@ set_union(iterator beg1, iterator end1, iterator beg2, iterator end2, iterator d
 //end2 容器2结束迭代器
 //dest 目标容器开始迭代器
 */
-
 
 /*P263 set_difference
 求两个集合的差集
