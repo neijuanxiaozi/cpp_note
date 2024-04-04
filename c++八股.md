@@ -8,12 +8,13 @@
 
 在 Linux 操作系统中，虚拟地址空间的内部又被分为**内核空间和用户空间**两部分，虽然每个进程都各自有独立的虚拟内存，但是**每个虚拟内存中的内核地址，其实关联的都是相同的物理内存**。这样，进程切换到内核态后，就可以很方便地访问内核空间内存。
 
-- 代码段，包括二进制可执行代码；
-- 数据段，包括已初始化的静态常量和全局变量；
-- BSS 段，包括未初始化的静态变量和全局变量；
-- 堆段，包括动态分配的内存，从低地址开始向上增长；
-- 文件映射段，包括动态库、共享内存等，从低地址开始向上增长（[跟硬件和内核版本有关 (opens new window)](http://lishiwen4.github.io/linux/linux-process-memory-location)）；
 - 栈段，包括局部变量和函数调用的上下文等。栈的大小是固定的，一般是 `8 MB`。当然系统也提供了参数，以便我们自定义大小；
+- 文件映射段，包括动态库、共享内存等，从低地址开始向上增长（[跟硬件和内核版本有关 (opens new window)](http://lishiwen4.github.io/linux/linux-process-memory-location)）；
+- 堆段，包括动态分配的内存，从低地址开始向上增长；
+- BSS 段，包括未初始化的静态变量和全局变量；
+- 数据段，包括已初始化的静态常量和全局变量；
+- 常量区：常量的存储位置，程序结束后由操作系统释放。
+- 代码段，包括二进制可执行代码；
 
 ### malloc()
 
@@ -64,6 +65,24 @@ operator delete(p2);
 ```
 
 `new`和`delete`是运算符，`operator new()`和`operator delete()` 是c++的函数，其内部会调用`malloc`和`free`，而且这两个函数可以重写。
+
+### malloc申请的内存是否可以使用delete，new申请内存是否可以使用free？
+
+可以，但不提倡。如果是简单类型，malloc申请的本身没有构造函数，可以调用delete，new申请的类对象中free可能会导致没有调用虚析构函数，导致内存泄漏。
+
+### 内存泄漏及其场景和解决办法
+
+在C++中，内存泄漏是指程序在动态分配内存后，未能在不再需要时正确释放内存，导致该部分内存不能被程序再次使用，并随着程序运行时间的增加，可能会耗尽系统资源。
+
+内存泄漏场景：
+
+- `new`和`delete`  `malloc`和`free`没有成对出现
+- 系统资源泄漏：位系统分配的资源没有释放掉(socket，文件)
+- 没有将基类的析构函数定义为虚函数。
+- 在释放对象数组时没有使用`delete []` 而是使用了`delete`，这样只会释放数组的第一个对象。
+- 智能指针的循环引用
+
+解决方法：通过智能指针可以规避大部分内存泄漏，linux环境可以使用工具`valgrind`。
 
 ### 智能指针unique_ptr和shared_ptr
 
@@ -214,12 +233,6 @@ extern用来声明变量或者函数的，extern是声明不是定义，不分�
 
 volatile放在变量前面，用来说明这个变量是不稳定的，易变的。这个关键字是告诉编译器的，不让编译器优化的，让编译器从内存中读取变量，不要在缓存中找。
 
-## 四个强制类型转换
-
-## std::move()
-
-## 线程join()和detach()
-
 ## 运算符和函数的区别
 
 ## RAII
@@ -304,9 +317,16 @@ https://blog.csdn.net/qq_31597573/article/details/51438996
 
 ## 内存对齐
 
+原因：
+
+- 不是所有的硬件平台都能访问任意地址上的任意数据的，有些只能在某些地址处取某些特定类型的数，否则抛出硬件异常。
+- 效率，内存对齐可以减少cpu开销，(避免一个数据被分割放在两个cpu cache上，这样读取这个数据需要读取两次将这个数据拼接而成。对齐之后可以从一个cache中直接读取到。不知道对不对)   **为了访问未对齐的内存，处理器需要两次内存访问；而对齐的内存访问仅需要一次访问。**
+
+![image-20240403195945985](./assets/image-20240403195945985.png)
+
 1. 数据成员对齐规则，`struct`，`class`的数据成员，第一个数据成员放在offset为0的地方，以后每个成员存储的起始位置都要从该成员大小或者成员的的子成员大小(只要该成员有子成员，比如所数组，结构体等)的整数倍开始(比如int在32位机为4字节，则要从4的整数倍地址开始存储)。
 2. 结构体作为成员：如果一个结构A嵌套了其他结构体B，要从B最大元素整数倍地址开始存储(`struct a`有`struct b b`里有`char`，`int`，`double`等元素，那b应该从8的整数倍开始存储)
-3. 收尾工作，结构体的总大小，也就是sizeof的结果，必须是其内部最大成员的证书别，不足大要补齐。
+3. 收尾工作，结构体的总大小，也就是`sizeof`的结果，必须是其内部最大成员的证书别，不足大要补齐。
 
 ```c++
 //1.
@@ -319,6 +339,135 @@ struct xx
 }
 ```
 
+## 空类的大小为1字节
 
+原因：编译器需要区分这个空类的不同实例，分配一个字节，使得空类的不用实例拥有独一无二的地址。
+
+## 模板函数和模板类的特例化
+
+模板函数特例化：必须为所有模板参数提供实参。就是要把特例的参数全写出来。
+
+类模板特例化：不必为所有模板参数提供实参。
+
+## C++STL
+
+### 迭代器删除如何避免失效
+
+### traits
+
+在算法中我们可能会定义简单的中间变量或者设定算法的返回变量类型，这时候需要知道迭代器所指元素的类型是什么，所以需要用到`traits`。
+
+如果需要用到迭代器所指元素的类型，就直接在迭代器的定义中将迭代器所指元素类型起个`value_type`别名即可。
+
+```c++
+template <class T>
+struct MyIter {
+    typedef T value_type; // 内嵌型别声明
+    T* ptr;
+    MyIter(T* p = 0) : ptr(p) {}
+    T& operator*() const { return *ptr; }
+};
+```
+
+这样可以直接使用迭代器所指类型。
+
+```c++
+MyIter::value_type
+```
+
+但是C++中的原生类型的指针类型比如`int*`里面就没有写`value_type` ,此时就需要用`traits`。
+
+```c++
+template <class Iterator> // 专门写一个iterator_traits类用来获取迭代器相关的各种类型
+struct iterator_traits {
+  typedef typename Iterator::iterator_category iterator_category; //迭代器类型
+  typedef typename Iterator::value_type        value_type; //迭代器指向的对象类型
+  typedef typename Iterator::difference_type   difference_type; //容器元素间的间隔
+  typedef typename Iterator::pointer           pointer; //迭代器指向的对象的指针
+  typedef typename Iterator::reference         reference; //迭代器指向的对象的引用
+};
+//然后为原生指针写偏特化的版本就可以了
+template <class T>
+struct iterator_traits<T*> {
+  typedef random_access_iterator_tag iterator_category;
+  typedef T                          value_type;
+  typedef ptrdiff_t                  difference_type;
+  typedef T*                         pointer;
+  typedef T&                         reference;
+};
+```
+
+### 序列式容器    关联式容器     容器适配器
+
+序列：array、vector、deque、list、forward_list、string
+
+关联：map、set、multiset、multimap、unordered_map、unordered_set、 unordered_multiset、unordered_multimap
+
+容器适配器：stack、queue、priority_queue
+
+### vector原理
+
+⼀段连续的线性内存空间，有三个迭代器`start、finish、end_of_storage`，分别是起始字节位置，当前最后一个元素起始位置和内存空间的末尾位置。
+
+空间不够时，申请1.5/2倍/2倍空间，把原来的数据拷⻉到新的内存空间，释放原来的内存空间。
+
+`reserve`：仅仅设置`capacity`这个参数
+
+`resize`：容量变⼤，填充初始值；容量变⼩，不调整容量，只把前n个元素填充为初始值
+
+**vector迭代器失效情况**：
+
+- erase删除位置之后的迭代器、指针、引⽤失效，因为元素前移了
+- insert，如果扩容了全部失效，没扩容就插入位置之后失效，因为后面元素后移了。
+
+**vector扩容：**vx下是1.5倍，gcc是2倍
+
+### list原理
+
+带头结点的双向循环链表
+
+### deque原理
+
+`deque`有一个中控器map，每个map指向一段连续的内存空间，每段连续空间有一个迭代器。`deque`的start和finish一开始指向map的中间，让前后空间保持相同
+
+### map set multiset multimap原理
+
+底层使用红黑树， 增删改查`logn`
+
+红黑树：节点有红黑两种颜色，根节点是黑色的，叶子节点是null并且是黑色的，红色节点的子节点必须是黑色，从任意节点到叶⼦节点的路径都包括相同数量的⿊⾊节点（⿊⼦节点的数量称为⿊⾼）
+
+为什么用红黑树，不用平衡二叉搜索树(AVL) ：1.AVL平衡规则太过严格，每次操作⼏乎都涉及左旋右旋2.AVL适合读取查找型密集任务，红⿊树适合插⼊密集型任务。
+
+### unordered_map,unordered_set,unordered_multimap,unordered_multiset原理
+
+底层用哈希表，用一个vector数组存储哈希值，并且使用拉链法、链表解决冲突
+
+![image-20240404202220730](./assets/image-20240404202220730.png)
+
+### 迭代器失效
+
+▪ 插入：vector、deque插入之后的位置失效，list、forward_list、map、set插入操作不失效 
+
+▪ 删除：vector、deque删除之后的位置失效，list、forward_list、map、set仅删除位置失效；递增当前iterator即可获取下⼀个位置
+
+ ▪ 扩容：内存重新分配全部失效
+
+ ▪ unordered_迭代器意义不大，stack、queue、priority_queue没有迭代器
+
+### stl的sort原理
+
+▪ 数据量很⼤使⽤快速排序
+
+ ▪ 递归过程中，分段之后数据量很⼩，使⽤插⼊排序（数据⼤致有序时候为O(n)，快排取元 素存在不确定性，快排在数据本⾝有序的时候是最慢的O(n^2)）
+
+ ▪ 递归过程中，递归层次过深，使⽤堆排序处理（递归层数多浪费时间，堆排序最好最坏都 是nlogn，归并也是但需要递归）
+
+## C++新特性
+
+### std::move()
+
+### 右值和左值
+
+### 线程join()和detach()
 
 # 面经搜集
