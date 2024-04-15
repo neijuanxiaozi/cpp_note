@@ -548,3 +548,8 @@ hash[key] = newValue
 delete(hash, key)
 ```
 
+## 三. go八股
+
+### defer执行时机
+
+`defer`的执行时机在`return`执行完，函数退出前执行，`defer`执行时可以修改函数返回值。
