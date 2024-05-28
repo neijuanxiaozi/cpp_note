@@ -667,36 +667,45 @@ gmp = goroutinue + machine(可以简单理解为内核视角下的一个线程)+
 
 <img src="./assets/image-20240526213159999.png" alt="image-20240526213159999" style="zoom: 80%;" />
 
-```c++
+```go
+//一些核心的数据结构
+//src/runtime/runtime2.go
 type g struct {
-    
+    goid    int64 // 唯一的goroutine的ID
+    sched gobuf // goroutine切换时，用于保存g的上下文
+    stack stack // 栈
+    gopc        // pc of go statement that created this goroutine
+    startpc    uintptr // pc of goroutine function
+    ...
 }
-```
-
-
-
-```go
-//m(线程):
-type m struct {
-    g0 *g;
-    tls  [tlsSlots]uintptr
-}
-```
-
-（1）g0：一类特殊的调度协程，不用于执行用户函数，负责执行g之间的切换调度，与m的关系为1：1
-
-（2）tls:thread-local storage 线程本地存储，存储内容只对当前线程可见，
-
-```go
 type p struct {
-    runqhead uin32//队列头部
-    runqtail uin32//队列尾部
-    runq  [256]guintptr //本地goroutine队列 基于数组实现的双向队列
-    runnext guintptr//下一个可执行的goroutinue
+    lock mutex
+    id          int32
+    status      uint32 // one of pidle/prunning/...
+
+    // Queue of runnable goroutines. Accessed without lock.
+    runqhead uint32 // 本地队列队头
+    runqtail uint32 // 本地队列队尾
+    runq     [256]guintptr // 本地队列，大小256的数组，数组往往会被都读入到缓存中，对缓存友好，效率较高
+    runnext guintptr // 下一个优先执行的goroutine（一定是最后生产出来的)，为了实现局部性原理，runnext中的G永远会被最先调度执行
+    ... 
+}
+
+type m struct {
+    g0            *g     
+    // 每个M都有一个自己的G0，不指向任何可执行的函数，在调度或系统调用时，M会切换到G0，使用G0的栈空间来调度
+    curg          *g    
+    // 当前正在执行的G
+    ... 
+}
+//还有schedt结构，是个全局goroutinue队列，访问需要加锁
+type schedt struct {
+    ...
+    runq     gQueue // 全局队列，链表（长度无限制）
+    runqsize int32  // 全局队列长度
+    ...
 }
 ```
-
-还有schedt结构，是个全局goroutinue队列，访问需要加锁
 
 ### 7.1 内存分配器
 
