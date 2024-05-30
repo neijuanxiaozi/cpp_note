@@ -709,7 +709,11 @@ type schedt struct {
 
 ### 7.1 内存分配器
 
-**设计原理：**
+go内存和c++内存https://blog.csdn.net/weixin_45805339/article/details/128178702
+
+**小徐先生1212**https://mp.weixin.qq.com/s/2TBwpQT5-zU4Gy7-i0LZmQ
+
+
 
 
 

@@ -638,11 +638,18 @@ int main(){
 }
 ```
 
-### final  override default delete explicit
+### final  override  default  delete explicit
 
-`final`：禁止类进⼀步派生和虚函数进一步重载。
+`final`和`override`是在C++11中引入的。
 
-`override`：表明该函数重写了基类函数；如果基类没有声明这个虚函数，编译报错。
+`final`：1. 禁止当前类进⼀步派生  2. 指定某个虚函数不能在派生类中被覆盖。解决的问题：有时不想要当前类被继承，没有手段组织哦。
+
+```c++
+class B final : public A {}
+virtual void Func() final {}
+```
+
+`override`：指定子类的一个虚函数复写基类的虚函数，保证该重写的虚函数与基类的虚函数具有相同的签名；如果基类没有声明这个虚函数，编译报错。解决问题：本意想重写父类中的虚函数，但是函数签名不一致，导致没有重写，如果使用了`override`必须要重写，这样就可以在编译期就检测出问题。举例：`virtual void Func() override {}`
 
 `explicit`：修饰构造函数，只能显式构造，不能被隐式转换。
 
@@ -747,5 +754,7 @@ https://blog.csdn.net/weixin_45031801/article/details/133993523
 
 **多态：**静态多态，比如函数重载，然后就是动态多态通过虚函数重写实现，目的是一个接口多种形态，通过实现接口重用，增强可扩展性。
 
+## function lambda bind之间的关系？
 
+## 虚析构函数的作用？
 
