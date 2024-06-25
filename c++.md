@@ -375,11 +375,7 @@ https://blog.csdn.net/qq_31597573/article/details/51438996
 
 ​	C++具有多重继承特性。菱形继承时最上面的基类会被继承两次，调用最上面基类的成员变量时会产生歧义，而且也会造成空间的浪费，需要用**虚继承**解决问题，让中间的两个类都虚继承最上面的基类。虚继承的目的是让某个类做出声明，承诺愿意共享它的基类。其中，这个被共享的基类就称为**虚基类**。
 
-​	**虚继承底层实现原理：**
-
-
-
-
+​	**虚继承底层实现原理：**通过虚表偏移的方式实现虚继承，子类只继承一次父类的父类。
 
 ## static_cast,  dynamic_cast,  const_cast,  reinterpret_cast
 
@@ -785,7 +781,77 @@ https://blog.csdn.net/weixin_45031801/article/details/133993523
 
 ## C++11中匿名函数和普通函数的区别？ function lambda bind之间的关系？
 
+因为C++中有很多不同的函数对象，函数指针、仿函数、lambda和bind产生的函数对象，所以需要一个类型来描述这些函数对象。`function`是一个抽象了函数参数以及函数返回值的类模板。
 
+`function`是把任意一个函数包装成对象，该对象可以保存、传递和复制。赋值不同的`function`对象可实现动态绑定，实现类似多态的效果。
+
+作用：保存普通函数、类静态成员函数、仿函数(函数对象，是重载了()的类，特定是可以有状态，通过成员变量存储一些状态，有状态的成员函数称为闭包)、类成员函数、`lambda`表达式(一种方便创建匿名函数对象语法糖，`lambda`的原理就是在编译的时候将它转化为一个函数对象，就是重载了()的类，根据`lambda`参数列表重载`operator())`，保存`bind`返回的函数对象。
+
+```c++
+//普通函数、类静态成员函数
+void hello() {
+    cout << "hello, world!";
+}
+int main() {
+    function<void(int)> f_hello1 = hello;
+  	f_hello(1);
+    function<void(int)> f_hello2 = &hello; //此处取地址和不取地址是一样的
+    f_hello2(1);
+    function<void(int)> f_hello3 = &StaticFunc::hello;//这是某个类的静态成员函数
+    f_hello3(2);
+	return 0;
+}
+```
+
+```c++
+//仿函数
+class Hello {
+public:
+    void operator() (int count) {
+        i += count;
+        cout << "Hello::hello mark:" << i << endl;
+    }
+    void operator() (int a, int b) {
+        cout << "Hello:hello mark: a+b= " << a + b << endl;
+    }
+    int i = 0;
+};
+int main() {
+    function<void(int)> f_hello4 = Hello();
+    f_hello4(4);
+}
+```
+
+```c++
+//成员函数
+class CHello {
+public:
+    void hello(int count) {
+        cout << "StaticFunc::hello mark" << count << endl;
+    }
+}
+int main() {
+    function<void(CHello *, int)> f_hello5 = &CHello::hello;
+    CHello c;
+    f_hello5(&c, 5);
+}
+```
+
+```c++
+  //lambda表达式
+int main() {
+    int i = 0;
+    auto f_hello6 = [&i](int count) -> void {
+        ++i;
+        cout << " lambda hello mark:" << count << "i = " << i << endl;
+    }
+    f_hello6(6);  
+}
+```
+
+```c++
+//bind是一个函数适配器 通过绑定函数以及函数参数的方式生成函数对象的模板函数，提供占位符，实现灵活绑定
+```
 
 ## 虚析构函数的作用？
 
