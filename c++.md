@@ -851,6 +851,23 @@ int main() {
 
 ```c++
 //bind是一个函数适配器 通过绑定函数以及函数参数的方式生成函数对象的模板函数，提供占位符，实现灵活绑定
+void hello(int count) {
+    cout << "StaticFunc::hello mark" << count << endl;
+}
+class CHello {
+public:
+    void hello(int count) {
+        cout << "StaticFunc::hello mark" << count << endl;
+    }
+}
+int main() {
+    auto f_hello7 = bind(&hello, 9);//这个地方写hello也行，会自动转成函数指针
+    f_hello7();
+    CHello c;
+	auto f_hello8 = bind(&CHello::hello, &c, 8);
+    f_hello8();
+}
+
 ```
 
 ## 虚析构函数的作用？
