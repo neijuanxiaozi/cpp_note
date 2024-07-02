@@ -783,9 +783,9 @@ https://blog.csdn.net/weixin_45031801/article/details/133993523
 
 因为C++中有很多不同的函数对象，函数指针、仿函数、lambda和bind产生的函数对象，所以需要一个类型来描述这些函数对象。`function`是一个抽象了函数参数以及函数返回值的类模板。
 
-`function`是把任意一个函数包装成对象，该对象可以保存、传递和复制。赋值不同的`function`对象可实现动态绑定，实现类似多态的效果。
+`function`是用来描述函数对象的类型是把任意一个函数包装成对象，该对象可以保存、传递和复制。赋值不同的`function`对象可实现动态绑定，实现类似多态的效果。
 
-作用：保存普通函数、类静态成员函数、仿函数(函数对象，是重载了()的类，特定是可以有状态，通过成员变量存储一些状态，有状态的成员函数称为闭包)、类成员函数、`lambda`表达式(一种方便创建匿名函数对象语法糖，`lambda`的原理就是在编译的时候将它转化为一个函数对象，就是重载了()的类，根据`lambda`参数列表重载`operator())`，保存`bind`返回的函数对象。
+作用：保存普通函数、类静态成员函数、仿函数(函数对象，是重载了()的类，特定是可以有状态，通过成员变量存储一些状态，有状态的成员函数称为闭包)、类成员函数、`lambda`表达式和bind产生的函数对象。
 
 ```c++
 //普通函数、类静态成员函数
@@ -860,15 +860,46 @@ public:
         cout << "StaticFunc::hello mark" << count << endl;
     }
 }
-int main() {
+int main() { 
     auto f_hello7 = bind(&hello, 9);//这个地方写hello也行，会自动转成函数指针
     f_hello7();
     CHello c;
 	auto f_hello8 = bind(&CHello::hello, &c, 8);
     f_hello8();
+    //可以通过占位符 保留不想绑定的参数
+    auto f_hello9 = bind(&CHello::hello, &c, placeholders::_1);
+    f_hello11(1000);
+    
+    return 0;
 }
 
+//起始bind就是生成了一个函数对象 传入了函数和参数都作为类的成员变量，然后在()重载函数中调用传入的函数和变量
+//举例
+class BindHello {
+public:
+    BindHello(function<void(int)> _fn, int _count) : fn(_fn), count(_count) {}
+    void operator()(){
+        fn(count);
+    }
+private:
+    function<void(int)> fn;
+    int count;
+};
+int main() {
+    auto f_hello10 = BindHello(&hello, 10);
+    f_hello10();
+}
 ```
+
+函数指针是一个指向函数内存地址的变量，函数地址的概念就意味着非内联函数，其中一个用途是作为回调函数。
+
+
+
+它在STL历史上有两个不同的名称。仿函数（functors）是早期的命名，c++标准规格定案后所采用的新名称是函数对象（function objects）。函数指针可以达到“将整组操作当作算法的参数”，那又何必有所谓的仿函数呢？原因在于函数指针毕竟不能满足STL 对抽象性的要求，也不能满足软件积木的要求——函数指针无法和STL其它组件（如配接器adapter）搭配，产生更灵活的变化。lambda是一种方便创建匿名函数对象语法糖，`lambda`的原理就是在编译的时候将它转化为一个函数对象，就是重载了()的类，根据`lambda`参数列表重载`operator()`，lamada捕获的值相当于函数对象的成员变量。
+
+
+
+lambda表达式可以方便的定义一个匿名函数，是一段匿名的内联代码块。使用lambda和bind的本质都是生成函数对象，区别是lambda表达式是可以访问外部变量的匿名函数，bind是生成的是函数和参数进行绑定的函数对象。为什么用lambda？让函数的定义在函数使用的地方，维护性和可读性很高。其次函数地址的概念就意味着非内联函数，而函数对象和lambda通常不会阻止内联。其次，**lambda可以访问作用域内的动态变量**，即可通过捕获列表访问一些上下文中的数据。
 
 ## 虚析构函数的作用？
 
