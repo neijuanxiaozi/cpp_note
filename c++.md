@@ -1,4 +1,8 @@
+[TOC]
+
 # 知识总结
+
+## 动态库与静态库的区别？
 
 ## cpp/c语言为什么用头文件？
 
@@ -55,8 +59,6 @@ add_executable(lesson1_1 main.cpp add.cpp)
 在项目目录下新建`build`目录，这个`build`目录与顶层`CMakeLists.txt`文件同层，然后`cd`到`build`下，`cmake ..`表示将编译与`build`同层的`CMakeLists.txt`，然后将生成的文件都放在当前的build目录下。
 
 `cmake .. -DCMAKE_VERBOSE_MAKEFILE=ON`表示展示`camke`过程。其中包括生成`makefile`等过程。
-
-
 
 ## C++指针与内存管理
 
