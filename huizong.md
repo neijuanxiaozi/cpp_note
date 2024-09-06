@@ -1419,12 +1419,152 @@ stdio在用户态是有缓冲区的，作用是减少系统调用的，用stdio�
 
 **支撑通信的基石：**共享内核空间，共享内核页表。在`fork()`子进程的时候，会初始化页表(用户页表)，然后拷贝内核页表。每个进程的用户页表不一样，内核页表是一样的。不同进程使用同一份内核页表这样就实现了共享内核空间。
 
-## 进程间通信有哪些？
+**通信方式：**
 
+信号
 
+信号量
 
+pipe(单工)
 
+socketpair(双工)
 
+消息队列
+
+不同主机之间：socket、redis、kafka、rebitmq
+
+## 进程写文件期间，文件被删除会出现什么情况
+
+进程打开文件的时候，会将文件读到内存，此时内容已经和磁盘上的文件独立了，并且操作系统会将文件的inode信息关联到文件描述符，也就增加他的引用计数，文件系统中是按照目录项和inode存储文件的，删除文件的操作只是删除了文件的目录项，并没有删除inode，只有当inode的引用计数为0的时候，才会删除inode，但是进程没有结束，inode就不会被删除，因此进程可以写已经删除的文件。
+
+### inode
+
+是一种结构体，存储文件的属性信息，权限、类型、大小等，大多数存在磁盘，常用的会缓存到内存中，采用引用计数来存储文件
+
+### 目录项
+
+存储文件名和inode的映射，通过目录项可以访问到inode，并且增加inode的引用计数
+
+### 硬链接
+
+多个目录下对应同一个inode文件
+
+### 软连接
+
+引用另一个文件的路径
+
+## 多个进程可以监听同一个端口吗
+
+可以的，因为tcp连接是使用4元组来进行确定的，因此只要更改其中一个既可以保证唯一性，因此如果有多张网卡，那么多个进程是可以监听同一个端口的
+
+还有就是多个进程可以监听同一个套接字，这里建立完套接字、监听后，直接fork复制进程就可以实现，nginx中间件就是采用这样的架构实现的reactor模式，不够这里可能会出现惊群问题，当然linux操作系统已经处理掉了这个问题，但是nginx是自己进行处理的，因为操作系统来处理不能做到负载均衡
+
+## 窗口扩大因子的实现
+
+由于tcp中的窗口大小只有两个字节，窗口大小对于现如今的带宽来讲已经严重不足了，因此tcp的窗口所表示的含义已经不在单纯表示窗口大小了，这里在tcp建立的时候会双方会协商出一个窗口扩大因子`shift.cnt`，然后真正的窗口大小计算公式如下
+$$
+windows\_size = tcp\_windows\_size * 2 ^{shift.cnt}
+$$
+
+# 计算机网络八股
+
+## cookie session token
+
+用户输入用户名和密码给服务端，服务端在验证正确后，会在服务器这边创建一个Session  ID和会话结束时间，然后把Session id加入到Cookie(KV键值对)中，再把会话结束时间对应设置为这个Cookie的有效期，然后返回给客户端。浏览器拿到Cookie后会进行保存。后续请求带上Cookie（失效后浏览器会自己删除Cookie，就得重新输入用户名和密码）
+
+在特定时间如果有大量用户访问服务器的时候，服务器会面临需要存储大量Session ID在服务器里，而且多台服务器的情况下，需要将Session ID分享给其他服务器(因为用户可能下次访问的是其他服务器)。
+
+然后出现技术JWT(JSON Web Token)，用户第一次登录以后在服务端生成一个JWT，服务端不需要保存JWT，只需要保存JWT签名的密文，然后将浏览器发送给浏览器，额可以让浏览器以Cookie或Storage的形式存储，然后浏览器每次请求把JWT发送给服务器。JWT由三部分组成header.payload.signature，最后一个签名是服务端算出来的，可以用于验证。
+
+Token是一个用户访问资源的凭证，它包含了身份验证信息和关联的元数据。
+
+## DNS解析流程   DNS的递归查询和迭代查询
+
+看小林coding
+
+https://www.xiaolincoding.com/network/4_ip/ip_base.html#%E7%82%B9%E5%BF%83-ip-%E5%8D%8F%E8%AE%AE%E7%9B%B8%E5%85%B3%E6%8A%80%E6%9C%AF
+
+1. 递归查询 在递归查询中，DNS客户端（通常是本地DNS解析器）向上层DNS服务器（如根域名服务器、顶级域名服务器）发 起查询请求，并要求这些服务器直接提供完整的解析结果。递归查询的特点是，DNS客户端只需要发送⼀个查询请 求，然后等待完整的解析结果。上层DNS服务器会⾃⾏查询下⼀级的服务器，并将最终结果返回给DNS客户端。 
+
+2. 迭代查询 在迭代查询中，DNS客户端向上层DNS服务器发起查询请求，但不要求直接提供完整的解析结果。相反，DNS客户 端只是询问上层服务器⼀个更⾼级的域名服务器的地址，然后再⾃⾏向那个更⾼级的服务器发起查询请求，以此类 推，直到获取完整的解析结果为⽌。 
+
+   递归查询适合普通⽤户和客户端，⽽迭代查询适⽤于DNS服务器之间的通信。
+
+## get和post区别
+
+看小林coding   https://www.xiaolincoding.com/network/2_http/http_interview.html#http-%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5
+
+## uri和url区别？
+
+URI，是uniform resource identifier，统一资源标识符，用来唯一的标识一个资源。而URL是uniform resource locator，统一资源定位器，它是一种具体的URI，即URL可以用来标识一个资源，而且还指明了如何locate这个资源。
+
+因此，URL是一种具体的URI，它不仅唯一标识资源，而且还提供了定位该资源的信息。URI是一种语义上的抽象概念，可以是绝对的，也可以是相对的，而URL则必须提供足够的信息来定位，所以，是绝对的，而通常说的relative URL，则是针对另一个absolute URL，本质上还是绝对的。
+
+## 0.0.0.0和127.0.0.1区别
+
+看小林coding   https://www.xiaolincoding.com/network/4_ip/ping_lo.html
+
+## Linux收发网络数据包流程
+
+看小林coding   https://www.xiaolincoding.com/network/1_base/how_os_deal_network_package.html#%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B
+
+## TCP如何保证可靠性？
+
+4个方面，重传机制，滑动窗口，流量控制，拥塞控制。
+
+重传机制：解决数据丢失问题，通过序列号和确认应答机制，具体的重传机制看小林coding。
+
+滑动窗口：在没有应答的情况下，发送方可以发送多少数据。
+
+## TCP窗口糊涂综合症
+
+前置问题：
+
+1. TCP是怎么是怎么实现可靠性传输的？
+2. 快速恢复和快速重传中为什么不是认为它已经发生拥塞了？为什么不重新从1开始？
+
+TCP窗口糊涂综合症产生原因：滑动窗口动态调整机制导致发送小包。1.发送方发送了小包  2. 接收方通告了小窗口。
+
+从两方面解决问题：
+
+- 接收方：
+  1. 在接收方这边接受能力过小直接通告窗口为0，一般等到1/2MSS时再通告窗口。
+  2. 延迟确认，让ACK包等等数据，然后一起发送。这样给了消费消息的时间，通告时可以通告更大的窗口。
+  3. 累计确认，收到好几个包之后，回一个ACK
+- 发送方：
+  1. 减少小包的发送数量（Nagle算法），算法的本质是小于MSS时，进行等待不发送，攒一个大的包合并发送，等待过程中有定时器，如果超时不管大小包立即发送。相关算法cork算法，它不是用来解决小包问题，解决网络中带宽的利用率问题，它没有定时器，小包就不发，一直等待。
+
+# mysql八股
+
+## mysql命令行
+
+```sql
+mysql -V/--version       			查看mysql版本
+sudo service mysql start  			开启服务
+sudo service mysql restart  		重启服务
+sudo service mysql stop  			关闭服务
+systemctl status mysql   			查看mysql状态
+mysql -u root -p         			登录root 我的密码为123456
+exit;								退出
+use mysql;							选择数据库
+select user,host from mysql.user;	查看mysql用户与主机权限
+source [script file];         		执行脚本，脚本名要包含路径
+select database();        			查看当前库
+show databases;           			展示所有库
+create database [database name];    创建数据库
+show tables;						展示表
+show columns from customers;        展示表列
+describe customers;					是show columns的快捷方式
+show status; 						显示服务器状态信息
+show create database;				
+show grants;						显示授予用户
+show errors;						显示错误
+show warnings;						显示警告
+```
+
+## 主库出问题了，从库怎么办？
+
+大多数场景都是一主多从结构，如下图。A为主库，A’为备库，BCD为从库。主库负责读写，从库负责读。
 
 <img src="./assets/image-20240305182051075.png" alt="image-20240305182051075" style="zoom: 50%;" />
 
